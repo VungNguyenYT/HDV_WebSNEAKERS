@@ -40,3 +40,7 @@ use App\Http\Controllers\ShoeController;
 Route::get('/shoes', [ShoeController::class, 'index'])->name('shoes.index');
 Route::get('/shoes/search', [ShoeController::class, 'search'])->name('shoes.search');
 Route::get('/shoes/filter', [ShoeController::class, 'filter'])->name('shoes.filter');
+
+
+
+Route::get('/', [ShoeController::class, 'home'])->name('home');
