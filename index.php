@@ -1,7 +1,7 @@
 <?php
 session_start(); // Bắt đầu session
 include 'includes/header.php';
-include 'includes/footer.php';
+
 include 'includes/db.php';
 
 // Tiêu đề cho trang
@@ -58,3 +58,5 @@ $products = $stmt->fetchAll();
         <?php endforeach; ?>
     </div>
 </main>
+
+<?php include 'includes/footer.php'; ?>

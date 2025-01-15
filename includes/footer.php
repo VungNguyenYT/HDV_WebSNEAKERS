@@ -1,5 +1,4 @@
-<footer
-    style="background-color: #333; color: #fff; text-align: center; padding: 1rem; position: fixed; bottom: 0; width: 100%;">
+<footer style="background-color: #333; color: #fff; text-align: center; padding: 1rem; bottom: 0; width: 100%;">
     <p>&copy; 2025 HDV Web Sneakers. All rights reserved.</p>
     <p>Liên hệ: <a href="mailto:support@hdvwebsneakers.com"
             style="color: #fff; text-decoration: none;">support@hdvwebsneakers.com</a> | Hotline: 1800 1234</p>

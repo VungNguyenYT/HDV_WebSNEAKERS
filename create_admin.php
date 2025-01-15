@@ -1,30 +1,32 @@
 <?php
-include 'includes/db.php';
 session_start();
+include 'includes/db.php'; // Kết nối cơ sở dữ liệu
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Xử lý khi người dùng gửi form
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
+    $confirm_password = trim($_POST['confirm_password']);
 
-    // Kiểm tra thông tin đăng nhập
-    $stmt = $conn->prepare("SELECT * FROM nguoi_dung WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['password'])) {
-        // Lưu thông tin người dùng vào session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-
-        // Kiểm tra quyền admin
-        if ($user['username'] === 'admin') {
-            header("Location: dashboard.php"); // Chuyển hướng đến trang dashboard
-        } else {
-            header("Location: index.php"); // Chuyển hướng đến trang chủ
-        }
-        exit;
+    // Kiểm tra mật khẩu có khớp không
+    if ($password !== $confirm_password) {
+        $error_message = "Mật khẩu và xác nhận mật khẩu không khớp!";
     } else {
-        $error_message = "Tên đăng nhập hoặc mật khẩu không chính xác!";
+        // Kiểm tra xem tên đăng nhập đã tồn tại chưa
+        $stmt = $conn->prepare("SELECT * FROM nguoi_dung WHERE username = ?");
+        $stmt->execute([$username]);
+        $existing_user = $stmt->fetch();
+
+        if ($existing_user) {
+            $error_message = "Tên đăng nhập đã tồn tại!";
+        } else {
+            // Mã hóa mật khẩu và lưu tài khoản vào cơ sở dữ liệu
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $conn->prepare("INSERT INTO nguoi_dung (username, password) VALUES (?, ?)");
+            $stmt->execute([$username, $hashed_password]);
+
+            $success_message = "Tài khoản admin đã được tạo thành công!";
+        }
     }
 }
 ?>
@@ -35,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập</title>
+    <title>Tạo tài khoản Admin</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -97,21 +99,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .message {
             text-align: center;
             font-weight: bold;
+        }
+
+        .error {
             color: red;
+        }
+
+        .success {
+            color: green;
         }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>HDV Web Sneakers</h1>
+        <h1>Tạo tài khoản Admin</h1>
     </header>
 
     <main>
         <form method="POST" action="">
-            <h2>Đăng nhập</h2>
+            <h2>Tạo Admin</h2>
             <?php if (!empty($error_message)): ?>
-                <p class="message"><?php echo $error_message; ?></p>
+                <p class="message error"><?php echo $error_message; ?></p>
+            <?php endif; ?>
+            <?php if (!empty($success_message)): ?>
+                <p class="message success"><?php echo $success_message; ?></p>
             <?php endif; ?>
 
             <label for="username">Tên đăng nhập:</label>
@@ -120,7 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="password">Mật khẩu:</label>
             <input type="password" id="password" name="password" required>
 
-            <button type="submit">Đăng nhập</button>
+            <label for="confirm_password">Xác nhận mật khẩu:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <button type="submit">Tạo tài khoản</button>
         </form>
     </main>
 </body>

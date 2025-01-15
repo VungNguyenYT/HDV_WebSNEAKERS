@@ -1,14 +1,20 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    die("<p>Bạn phải đăng nhập để thanh toán! <a href='login.php'>Đăng nhập</a></p>");
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    $user_id = $_SESSION['user_id']; // Giả sử user_id đã được lưu khi đăng nhập
+    $user_id = $_SESSION['user_id'];
 
-    // Tính tổng giá trị giỏ hàng
-    $total = 0;
     include 'includes/db.php';
+
+    // Tính tổng giá trị đơn hàng
+    $total = 0;
     foreach ($_SESSION['cart'] as $product_id => $quantity) {
         $stmt = $conn->prepare("SELECT price FROM shoes WHERE id = ?");
         $stmt->execute([$product_id]);
@@ -16,13 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $total += $product['price'] * $quantity;
     }
 
-    // Lưu thông tin đơn hàng vào bảng orders
+    // Lưu đơn hàng
     $stmt = $conn->prepare("INSERT INTO orders (user_id, customer_name, address, phone, total_price) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([$user_id, $name, $address, $phone, $total]);
 
-    // Xóa giỏ hàng sau khi thanh toán thành công
+    // Xóa giỏ hàng
     unset($_SESSION['cart']);
 
-    echo "<p style='text-align: center; margin-top: 20px;'>Thanh toán thành công! Cảm ơn bạn đã mua sắm tại HDV Web Sneakers.</p>";
+    echo "<p>Thanh toán thành công! Cảm ơn bạn đã mua sắm tại HDV Web Sneakers.</p>";
 }
 ?>

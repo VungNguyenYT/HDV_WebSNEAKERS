@@ -124,7 +124,8 @@ include 'includes/db.php'; // Kết nối cơ sở dữ liệu
                     <?php endforeach; ?>
                 </table>
                 <p style="text-align: right; margin-top: 20px;">Tổng cộng:
-                    <strong><?php echo number_format($total, 0, ',', '.'); ?> VND</strong></p>
+                    <strong><?php echo number_format($total, 0, ',', '.'); ?> VND</strong>
+                </p>
                 <div style="text-align: right; margin-top: 20px;">
                     <button type="submit" class="update-btn">Cập nhật giỏ hàng</button>
                 </div>
