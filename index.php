@@ -1,4 +1,5 @@
 <?php
+session_start(); // Bắt đầu session
 include 'includes/header.php';
 include 'includes/footer.php';
 include 'includes/db.php';
@@ -32,7 +33,7 @@ $products = $stmt->fetchAll();
             <option value="Vans">Vans</option>
             <option value="Nike">Nike</option>
             <option value="Adidas">Adidas</option>
-            <option value="Puma">Puma</option>
+            <option value="Bitis">Bitis</option>
             <option value="Converse">Converse</option>
         </select>
     </form>

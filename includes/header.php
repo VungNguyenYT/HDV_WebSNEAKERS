@@ -1,7 +1,3 @@
-<?php
-session_start(); // Bắt đầu session để kiểm tra trạng thái đăng nhập
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,14 +32,8 @@ session_start(); // Bắt đầu session để kiểm tra trạng thái đăng n
         <h1>HDV Web Sneakers</h1>
         <nav>
             <a href="index.php">Trang chủ</a>
-            <?php if (isset($_SESSION['username'])): ?>
-                <!-- Hiển thị nút Giỏ hàng và Đăng xuất khi đã đăng nhập -->
-                <a href="cart.php">Giỏ hàng</a>
-                <a href="logout.php">Đăng xuất</a>
-            <?php else: ?>
-                <!-- Hiển thị nút Đăng nhập và Đăng ký khi chưa đăng nhập -->
-                <a href="login.php">Đăng nhập</a>
-                <a href="register.php">Đăng ký</a>
-            <?php endif; ?>
+            <a href="login.php">Đăng nhập</a>
+            <a href="register.php">Đăng ký</a>
+            <a href="cart.php">Giỏ hàng</a> <!-- Nút giỏ hàng -->
         </nav>
     </header>

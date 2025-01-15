@@ -2,7 +2,7 @@
 include 'includes/db.php'; // Kết nối cơ sở dữ liệu
 include 'includes/header.php'; // Header
 
-
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
